@@ -1,0 +1,76 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-ink: 58 46 42;
+  --color-butter: 255 233 166;
+  --color-peach: 255 199 183;
+  --color-mint: 191 241 212;
+  --color-lilac: 217 194 255;
+  --color-coral: 255 142 122;
+  --color-cream: 255 251 244;
+}
+
+body {
+  font-family: var(--font-body), sans-serif;
+  color: rgb(var(--color-ink));
+  background: radial-gradient(circle at top, rgb(255 246 225), rgb(255 227 209));
+  min-height: 100vh;
+}
+
+.font-display {
+  font-family: var(--font-display), sans-serif;
+}
+
+.bg-blush {
+  background: radial-gradient(circle at top, rgb(255 246 225), rgb(255 227 209));
+}
+
+.card-soft {
+  @apply rounded-3xl bg-white/80 backdrop-blur border border-white/70 shadow-xl p-6;
+}
+
+.input-soft {
+  @apply mt-1 w-full rounded-xl border border-ink/10 bg-white/90 px-3 py-2 text-sm shadow-inner focus:outline-none focus:ring-2 focus:ring-orange-200;
+}
+
+.btn-primary {
+  @apply rounded-full bg-orange-400 px-5 py-2 text-sm font-semibold text-white shadow-md hover:bg-orange-500 transition;
+}
+
+.btn-outline {
+  @apply rounded-full border border-ink/20 bg-white/70 px-5 py-2 text-sm font-semibold text-ink hover:bg-white transition;
+}
+
+.link-soft {
+  @apply text-ink/70 hover:text-ink underline decoration-dotted;
+}
+
+.badge-soft {
+  @apply rounded-full px-3 py-1 text-xs font-semibold bg-white/70 border border-ink/10;
+}
+
+.grid-cell {
+  @apply flex items-center justify-center text-lg font-semibold rounded-md transition;
+}
+
+.grid-cell.selected {
+  @apply ring-2 ring-orange-300 bg-orange-50;
+}
+
+.grid-cell.fixed {
+  @apply text-ink/80 bg-white/90;
+}
+
+.grid-cell.editable {
+  @apply text-orange-600 bg-white;
+}
+
+.grid-cell.highlight {
+  @apply bg-orange-50;
+}
+
+.sticker {
+  @apply absolute rounded-2xl bg-white/80 shadow-md px-3 py-2 text-xs font-semibold rotate-2;
+}
