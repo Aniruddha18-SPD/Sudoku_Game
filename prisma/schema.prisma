@@ -96,6 +96,7 @@ model Completion {
   elapsedMs  Int
   score      Int
   hintsUsed  Int
+  timed      Boolean  @default(true)
   createdAt  DateTime @default(now())
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

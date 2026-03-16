@@ -24,6 +24,10 @@
   --color-cream: 255 251 244;
 }
 
+.dark {
+  --color-ink: 245 242 238;
+}
+
 body {
   font-family: var(--font-body), sans-serif;
   color: rgb(var(--color-ink));
@@ -32,6 +36,12 @@ body {
   animation: mesh 15s ease infinite;
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background 0.5s ease;
+}
+
+.dark body {
+  background: linear-gradient(-45deg, #2c2136, #3a2536, #1a2a33, #212c23);
+  background-size: 400% 400%;
 }
 
 .font-display {
@@ -39,11 +49,11 @@ body {
 }
 
 .card-soft {
-  @apply rounded-3xl bg-white/70 backdrop-blur-md border border-white/50 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] p-6;
+  @apply rounded-3xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)] p-6 transition-colors dark:bg-black/40 dark:border-white/20 dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.5)];
 }
 
 .input-soft {
-  @apply mt-1 w-full rounded-xl border border-ink/10 bg-white/60 px-3 py-2 text-sm shadow-inner focus:outline-none focus:ring-2 focus:ring-orange-300 transition-all backdrop-blur-sm;
+  @apply mt-1 w-full rounded-xl border border-ink/10 bg-white/60 px-3 py-2 text-sm shadow-inner focus:outline-none focus:ring-2 focus:ring-orange-300 transition-all backdrop-blur-sm dark:bg-black/40 dark:border-white/10 dark:text-white dark:focus:ring-orange-500;
 }
 
 .btn-primary {
@@ -51,37 +61,37 @@ body {
 }
 
 .btn-outline {
-  @apply flex items-center justify-center gap-2 rounded-full border border-white/40 bg-white/40 backdrop-blur-md px-5 py-2 text-sm font-semibold text-ink shadow-sm transition-all hover:bg-white/60 hover:shadow-md active:scale-95;
+  @apply flex items-center justify-center gap-2 rounded-full border border-white/40 bg-white/40 backdrop-blur-md px-5 py-2 text-sm font-semibold text-ink shadow-sm transition-all hover:bg-white/60 hover:shadow-md active:scale-95 dark:bg-black/40 dark:border-white/10 dark:text-white dark:hover:bg-white/10;
 }
 
 .link-soft {
-  @apply text-ink/70 hover:text-ink underline decoration-dotted transition-colors;
+  @apply text-ink/70 hover:text-ink underline decoration-dotted transition-colors dark:text-white/70 dark:hover:text-white;
 }
 
 .badge-soft {
-  @apply rounded-full px-3 py-1 text-xs font-semibold bg-white/50 backdrop-blur-sm border border-white/40 shadow-sm transition-colors;
+  @apply rounded-full px-3 py-1 text-xs font-semibold bg-white/50 backdrop-blur-sm border border-white/40 shadow-sm transition-colors dark:bg-black/40 dark:border-white/10 dark:text-white;
 }
 
 .grid-cell {
-  @apply flex items-center justify-center text-lg font-semibold rounded-lg transition-colors border-white/20;
+  @apply flex items-center justify-center text-lg font-semibold rounded-lg transition-all border border-white/60 shadow-sm dark:border-white/10 dark:shadow-black/40;
 }
 
 .grid-cell.selected {
-  @apply ring-2 ring-orange-400 bg-orange-100/80 shadow-inner;
+  @apply ring-[3px] ring-orange-400 bg-gradient-to-br from-orange-100 to-orange-200 shadow-inner scale-[1.03] z-10 dark:from-orange-800/60 dark:to-orange-900/40 dark:ring-orange-500;
 }
 
 .grid-cell.fixed {
-  @apply text-ink/90 bg-white/80 font-bold backdrop-blur-sm;
+  @apply text-ink/90 bg-gradient-to-br from-white to-neutral-50 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] font-bold dark:from-neutral-800 dark:to-neutral-900 dark:text-neutral-100 dark:border-neutral-700 dark:shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)];
 }
 
 .grid-cell.editable {
-  @apply text-orange-600 bg-white/50 backdrop-blur-sm hover:bg-white/70;
+  @apply text-rose-600 bg-white/70 backdrop-blur-md hover:bg-white hover:shadow-md dark:bg-neutral-800/80 dark:text-orange-400 dark:hover:bg-neutral-700;
 }
 
 .grid-cell.highlight {
-  @apply bg-orange-50/60;
+  @apply bg-orange-50/60 dark:bg-white/5;
 }
 
 .sticker {
-  @apply absolute rounded-2xl bg-gradient-to-br from-white/90 to-white/60 backdrop-blur-md border border-white/50 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] px-3 py-2 text-xs font-semibold rotate-2 transition-transform hover:rotate-0 hover:scale-105;
+  @apply absolute rounded-2xl bg-gradient-to-br from-white/90 to-white/60 backdrop-blur-md border border-white/50 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] px-3 py-2 text-xs font-semibold rotate-2 transition-transform hover:rotate-0 hover:scale-105 dark:from-black/80 dark:to-black/40 dark:border-white/10 dark:text-white;
 }

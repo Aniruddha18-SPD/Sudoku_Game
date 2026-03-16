@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { stringToBoard, isSolved } from "@/lib/sudoku";
@@ -10,6 +10,7 @@ const schema = z.object({
   board: z.string().length(81),
   elapsedMs: z.number().int().nonnegative(),
   hintsUsed: z.number().int().nonnegative().optional().default(0),
+  timed: z.boolean().optional().default(true),
 });
 
 const baseScore: Record<string, number> = {
@@ -19,10 +20,11 @@ const baseScore: Record<string, number> = {
   expert: 5000,
 };
 
-function scoreFor(difficulty: string, elapsedMs: number, hintsUsed: number) {
+function scoreFor(difficulty: string, elapsedMs: number, hintsUsed: number, timed: boolean) {
   const base = baseScore[difficulty] ?? 1000;
   const elapsedSeconds = Math.floor(elapsedMs / 1000);
-  const timePenalty = Math.floor(elapsedSeconds / 5) * 10;
+  // No time penalty for untimed sessions — just hint penalty
+  const timePenalty = timed ? Math.floor(elapsedSeconds / 5) * 10 : 0;
   const hintPenalty = hintsUsed * 250;
   return Math.max(0, base - timePenalty - hintPenalty);
 }
@@ -53,7 +55,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ correct: false, score: 0 });
   }
 
-  const score = scoreFor(puzzle.difficulty, parsed.data.elapsedMs, parsed.data.hintsUsed);
+  const { timed } = parsed.data;
+  const score = scoreFor(puzzle.difficulty, parsed.data.elapsedMs, parsed.data.hintsUsed, timed);
 
   const session = await getServerSession(authOptions);
   if (session?.user?.id) {
@@ -65,10 +68,10 @@ export async function POST(request: Request) {
         elapsedMs: parsed.data.elapsedMs,
         score,
         hintsUsed: parsed.data.hintsUsed,
+        timed,
       },
     });
   }
 
   return NextResponse.json({ correct: true, score });
 }
-
