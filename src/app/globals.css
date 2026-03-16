@@ -1,6 +1,18 @@
-﻿@tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes mesh {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
 :root {
   --color-ink: 58 46 42;
@@ -15,62 +27,61 @@
 body {
   font-family: var(--font-body), sans-serif;
   color: rgb(var(--color-ink));
-  background: radial-gradient(circle at top, rgb(255 246 225), rgb(255 227 209));
+  background: linear-gradient(-45deg, #ffd3b6, #ffaaa5, #a8e6cf, #dcedc1);
+  background-size: 400% 400%;
+  animation: mesh 15s ease infinite;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .font-display {
   font-family: var(--font-display), sans-serif;
 }
 
-.bg-blush {
-  background: radial-gradient(circle at top, rgb(255 246 225), rgb(255 227 209));
-}
-
 .card-soft {
-  @apply rounded-3xl bg-white/80 backdrop-blur border border-white/70 shadow-xl p-6;
+  @apply rounded-3xl bg-white/70 backdrop-blur-md border border-white/50 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] p-6;
 }
 
 .input-soft {
-  @apply mt-1 w-full rounded-xl border border-ink/10 bg-white/90 px-3 py-2 text-sm shadow-inner focus:outline-none focus:ring-2 focus:ring-orange-200;
+  @apply mt-1 w-full rounded-xl border border-ink/10 bg-white/60 px-3 py-2 text-sm shadow-inner focus:outline-none focus:ring-2 focus:ring-orange-300 transition-all backdrop-blur-sm;
 }
 
 .btn-primary {
-  @apply rounded-full bg-orange-400 px-5 py-2 text-sm font-semibold text-white shadow-md hover:bg-orange-500 transition;
+  @apply flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-orange-400 to-rose-400 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all hover:shadow-orange-500/50 hover:brightness-110 active:scale-95;
 }
 
 .btn-outline {
-  @apply rounded-full border border-ink/20 bg-white/70 px-5 py-2 text-sm font-semibold text-ink hover:bg-white transition;
+  @apply flex items-center justify-center gap-2 rounded-full border border-white/40 bg-white/40 backdrop-blur-md px-5 py-2 text-sm font-semibold text-ink shadow-sm transition-all hover:bg-white/60 hover:shadow-md active:scale-95;
 }
 
 .link-soft {
-  @apply text-ink/70 hover:text-ink underline decoration-dotted;
+  @apply text-ink/70 hover:text-ink underline decoration-dotted transition-colors;
 }
 
 .badge-soft {
-  @apply rounded-full px-3 py-1 text-xs font-semibold bg-white/70 border border-ink/10;
+  @apply rounded-full px-3 py-1 text-xs font-semibold bg-white/50 backdrop-blur-sm border border-white/40 shadow-sm transition-colors;
 }
 
 .grid-cell {
-  @apply flex items-center justify-center text-lg font-semibold rounded-md transition;
+  @apply flex items-center justify-center text-lg font-semibold rounded-lg transition-colors border-white/20;
 }
 
 .grid-cell.selected {
-  @apply ring-2 ring-orange-300 bg-orange-50;
+  @apply ring-2 ring-orange-400 bg-orange-100/80 shadow-inner;
 }
 
 .grid-cell.fixed {
-  @apply text-ink/80 bg-white/90;
+  @apply text-ink/90 bg-white/80 font-bold backdrop-blur-sm;
 }
 
 .grid-cell.editable {
-  @apply text-orange-600 bg-white;
+  @apply text-orange-600 bg-white/50 backdrop-blur-sm hover:bg-white/70;
 }
 
 .grid-cell.highlight {
-  @apply bg-orange-50;
+  @apply bg-orange-50/60;
 }
 
 .sticker {
-  @apply absolute rounded-2xl bg-white/80 shadow-md px-3 py-2 text-xs font-semibold rotate-2;
+  @apply absolute rounded-2xl bg-gradient-to-br from-white/90 to-white/60 backdrop-blur-md border border-white/50 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] px-3 py-2 text-xs font-semibold rotate-2 transition-transform hover:rotate-0 hover:scale-105;
 }
