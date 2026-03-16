@@ -1,4 +1,4 @@
-﻿import type { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -34,9 +34,9 @@ export const authOptions: NextAuthOptions = {
         const isValid = await bcrypt.compare(password, user.passwordHash);
         if (!isValid) return null;
 
-        if (!user.emailVerified) {
-          throw new Error("EMAIL_NOT_VERIFIED");
-        }
+        // if (!user.emailVerified) {
+        //   throw new Error("EMAIL_NOT_VERIFIED");
+        // }
 
         return {
           id: user.id,

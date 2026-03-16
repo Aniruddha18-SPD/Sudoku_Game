@@ -8,6 +8,16 @@ export async function sendVerificationEmail(email: string, token: string) {
   if (!fromEmail) return;
   const verifyUrl = `${process.env.NEXTAUTH_URL}/verify?token=${token}`;
 
+  const hasDummyKey = process.env.RESEND_API_KEY?.startsWith("re_") === false && !process.env.RESEND_API_KEY;
+  if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === "re_dummy_key") {
+    console.log(`\n================================`);
+    console.log(`[LOCAL DEV EMAIL - Verification]`);
+    console.log(`To: ${email}`);
+    console.log(`Click this link to verify your account:\n${verifyUrl}`);
+    console.log(`================================\n`);
+    return;
+  }
+
   await resend.emails.send({
     from: fromEmail,
     to: email,
@@ -25,6 +35,15 @@ export async function sendVerificationEmail(email: string, token: string) {
 export async function sendPasswordResetEmail(email: string, token: string) {
   if (!fromEmail) return;
   const resetUrl = `${process.env.NEXTAUTH_URL}/reset?token=${token}`;
+
+  if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === "re_dummy_key") {
+    console.log(`\n================================`);
+    console.log(`[LOCAL DEV EMAIL - Password Reset]`);
+    console.log(`To: ${email}`);
+    console.log(`Click this link to reset your password:\n${resetUrl}`);
+    console.log(`================================\n`);
+    return;
+  }
 
   await resend.emails.send({
     from: fromEmail,

@@ -136,7 +136,7 @@ export default function HomePage() {
   const [undoStack, setUndoStack] = useState<{ board: number[]; notes: number[][] }[]>([]);
 
   function handleInput(value: number) {
-    if (selected === null || fixed[selected]) return;
+    if (!puzzleId || selected === null || fixed[selected]) return;
 
     const nextBoard = [...board];
     const nextNotes = cloneNotes(notes);
@@ -160,7 +160,7 @@ export default function HomePage() {
   }
 
   function handleClear() {
-    if (selected === null || fixed[selected]) return;
+    if (!puzzleId || selected === null || fixed[selected]) return;
     pushHistory(board, notes);
     const nextBoard = [...board];
     const nextNotes = cloneNotes(notes);
@@ -491,63 +491,74 @@ export default function HomePage() {
         <motion.section variants={itemVariants} className="card-soft relative flex flex-col items-center">
           <div className="sticker -top-4 left-10">No pressure, just vibes 🌸</div>
           
-          <div className="grid grid-cols-9 gap-1 rounded-3xl bg-white/40 border border-white/60 p-3 sm:p-5 shadow-inner w-full max-w-lg aspect-square">
-            {board.map((value, idx) => {
-              const isSelected = selected === idx;
-              const isFixed = fixed[idx];
-              const highlight = highlightCells[idx];
-              const cellNotes = notes[idx];
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 rounded-2xl sm:rounded-3xl bg-white/40 border border-white/60 p-3 sm:p-5 shadow-[inset_0_0_20px_rgba(0,0,0,0.05)] w-full max-w-lg aspect-square">
+            {Array.from({ length: 9 }).map((_, boxIdx) => {
+              const boxRow = Math.floor(boxIdx / 3);
+              const boxCol = boxIdx % 3;
               
               return (
-                <motion.div
-                  whileHover={!isFixed ? { scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.9)", zIndex: 10 } : {}}
-                  whileTap={!isFixed ? { scale: 0.95 } : {}}
-                  initial={puzzleId ? { scale: 0.5, opacity: 0 } : false}
-                  animate={puzzleId ? { scale: 1, opacity: 1 } : false}
-                  transition={{ delay: puzzleId ? (idx % 9) * 0.02 + Math.floor(idx / 9) * 0.02 : 0 }}
-                  key={`${puzzleId}-${idx}`}
-                  className={`grid-cell relative ${isFixed ? "fixed" : "editable"} ${
-                    isSelected ? "selected" : ""
-                  } ${highlight && !isSelected ? "highlight" : ""}`}
-                  style={{
-                    borderWidth: idx % 3 === 0 ? 2 : 1,
-                    borderRightWidth: (idx + 1) % 3 === 0 ? 2 : 1,
-                    borderTopWidth: idx < 9 ? 2 : 1,
-                    borderBottomWidth: idx >= 72 ? 2 : 1,
-                    borderColor: 'rgba(255,255,255,0.4)',
-                  }}
-                  onClick={() => setSelected(idx)}
-                >
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[1-9]*"
-                    maxLength={1}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    value={value !== 0 ? String(value) : ""}
-                    onChange={(e) => {
-                       const val = e.target.value.slice(-1);
-                       if (val >= "1" && val <= "9") {
-                         handleInput(Number(val));
-                       } else if (val === "" || val === "0") {
-                         handleClear();
-                       }
-                    }}
-                    disabled={isFixed}
-                    aria-label={`Cell ${idx}`}
-                  />
-                  {value !== 0 ? (
-                    <span className={`pointer-events-none transition-transform ${isFixed ? "text-ink text-xl sm:text-2xl font-semibold" : "text-rose-600 text-xl sm:text-2xl font-bold font-display drop-shadow-sm scale-[1.15]"}`}>{value}</span>
-                  ) : cellNotes.length > 0 ? (
-                    <div className="grid grid-cols-3 w-full h-full p-0.5 pointer-events-none">
-                      {Array.from({ length: 9 }, (_, n) => n + 1).map((num) => (
-                        <span key={num} className="text-[9px] sm:text-[11px] leading-none flex items-center justify-center text-ink/40 font-medium">
-                          {cellNotes.includes(num) ? num : ""}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
-                </motion.div>
+                <div key={boxIdx} className="grid grid-cols-3 gap-1">
+                  {Array.from({ length: 9 }).map((_, innerIdx) => {
+                    const innerRow = Math.floor(innerIdx / 3);
+                    const innerCol = innerIdx % 3;
+                    const row = boxRow * 3 + innerRow;
+                    const col = boxCol * 3 + innerCol;
+                    const idx = row * 9 + col;
+                    
+                    const value = board[idx];
+                    const isSelected = selected === idx;
+                    const isFixed = fixed[idx];
+                    const highlight = highlightCells[idx];
+                    const cellNotes = notes[idx];
+                    
+                    return (
+                      <motion.div
+                        whileHover={!isFixed ? { scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.9)", zIndex: 10 } : {}}
+                        whileTap={!isFixed ? { scale: 0.95 } : {}}
+                        initial={puzzleId ? { scale: 0.5, opacity: 0 } : false}
+                        animate={puzzleId ? { scale: 1, opacity: 1 } : false}
+                        transition={{ delay: puzzleId ? (idx % 9) * 0.02 + Math.floor(idx / 9) * 0.02 : 0 }}
+                        key={`${puzzleId}-${idx}`}
+                        className={`grid-cell relative border border-white/40 shadow-sm ${isFixed ? "fixed" : "editable"} ${
+                          isSelected ? "selected" : ""
+                        } ${highlight && !isSelected ? "highlight" : ""}`}
+                        onClick={() => {
+                          if (puzzleId) setSelected(idx);
+                        }}
+                      >
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[1-9]*"
+                          maxLength={1}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                          value={value !== 0 ? String(value) : ""}
+                          onChange={(e) => {
+                             const val = e.target.value.slice(-1);
+                             if (val >= "1" && val <= "9") {
+                               handleInput(Number(val));
+                             } else if (val === "" || val === "0") {
+                               handleClear();
+                             }
+                          }}
+                          disabled={!puzzleId || isFixed}
+                          aria-label={`Cell ${idx}`}
+                        />
+                        {value !== 0 ? (
+                          <span className={`pointer-events-none transition-transform ${isFixed ? "text-ink text-xl sm:text-2xl font-semibold" : "text-rose-600 text-xl sm:text-2xl font-bold font-display drop-shadow-sm scale-[1.15]"}`}>{value}</span>
+                        ) : cellNotes.length > 0 ? (
+                          <div className="grid grid-cols-3 w-full h-full p-0.5 pointer-events-none">
+                            {Array.from({ length: 9 }, (_, n) => n + 1).map((num) => (
+                              <span key={num} className="text-[9px] sm:text-[11px] leading-none flex items-center justify-center text-ink/40 font-medium">
+                                {cellNotes.includes(num) ? num : ""}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
+                      </motion.div>
+                    );
+                  })}
+                </div>
               );
             })}
           </div>
